@@ -11,13 +11,15 @@ class Battle:
         self.knight2.before_fight()
 
     def fight(self) -> None:
-        self.knight1.hp -= self.knight2.power - self.knight1.protection
-        if self.knight1.hp <= 0:
-            self.knight1.hp = 0
+        combatants = [
+            (self.knight1, self.knight2.power),
+            (self.knight2, self.knight1.power),
+        ]
 
-        self.knight2.hp -= self.knight1.power - self.knight2.protection
-        if self.knight2.hp <= 0:
-            self.knight2.hp = 0
+        for defender, attacker_power in combatants:
+            damage = attacker_power - defender.protection
+            if damage > 0:
+                defender.hp = max(0, defender.hp - damage)
 
     def start(self) -> None:
         self.prepare()

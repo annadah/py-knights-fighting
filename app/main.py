@@ -3,22 +3,20 @@ from app.knight_clas import Knight
 
 
 def battle(knights_config: dict) -> dict:
-    lancelot = Knight.from_dict(knights_config["lancelot"])
-    mordred = Knight.from_dict(knights_config["mordred"])
-    arthur = Knight.from_dict(knights_config["arthur"])
-    red_knight = Knight.from_dict(knights_config["red_knight"])
-
-    battle1 = Battle(lancelot, mordred)
-    battle1.start()
-
-    battle2 = Battle(arthur, red_knight)
-    battle2.start()
-    return {
-        lancelot.name: lancelot.hp,
-        arthur.name: arthur.hp,
-        mordred.name: mordred.hp,
-        red_knight.name: red_knight.hp,
+    knights = {
+        name: Knight.from_dict(config)
+        for name, config in knights_config.items()
     }
 
-# print(battle(None))
-# print(battle(KNIGHTS))
+    battles = [
+        ("lancelot", "mordred"),
+        ("arthur", "red_knight"),
+    ]
+
+    for knight1, knight2 in battles:
+        Battle(knights[knight1], knights[knight2]).start()
+
+    return {
+        knight.name: knight.hp
+        for knight in knights.values()
+    }
